@@ -5,6 +5,10 @@ export function createApp(db: Database.Database): Express {
   const app = express();
   app.use(express.json());
 
+  app.get("/health", (_req, res) => {
+    res.status(200).json({ status: "ok" });
+  });
+
   app.post("/habits", (req, res) => {
     const raw = req.body?.title;
     if (typeof raw !== "string" || raw.trim().length === 0) {
