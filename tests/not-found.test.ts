@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import request from "supertest";
 import Database from "better-sqlite3";
 import { createApp } from "../src/app.js";
-// comment
+// comment check file 
 describe("404", () => {
   let db: Database.Database;
 
@@ -15,7 +15,7 @@ describe("404", () => {
       )
     `);
   });
-
+// check the file 
   it("returns JSON for unknown paths", async () => {
     const app = createApp(db);
     const res = await request(app).get("/nope").expect(404);
