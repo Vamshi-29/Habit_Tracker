@@ -47,5 +47,9 @@ export function createApp(db: Database.Database): Express {
     });
   });
 
+  app.use((_req, res) => {
+    res.status(404).json({ error: "Not found" });
+  });
+
   return app;
 }
