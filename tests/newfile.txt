@@ -5,3 +5,7 @@ to check the status of the Pr
 
 
 changes doen
+
+
+
+chnage ro a file given
