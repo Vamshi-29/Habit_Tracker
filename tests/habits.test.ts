@@ -90,4 +90,21 @@ describe("POST /habits", () => {
 
     expect(res.body).toEqual({ error: "Title is required" });
   });
+
+  it("rejects title longer than 200 characters with 400", async () => {
+    const app = createApp(db);
+    const longTitle = "a".repeat(201);
+    const res = await request(app)
+      .post("/habits")
+      .send({ title: longTitle })
+      .expect(400);
+
+    expect(res.body).toEqual({
+      error: "Title must be at most 200 characters",
+    });
+    const count = db.prepare("SELECT COUNT(*) AS c FROM habits").get() as {
+      c: number;
+    };
+    expect(count.c).toBe(0);
+  });
 });
