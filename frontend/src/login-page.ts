@@ -58,11 +58,16 @@ export function mountLoginPage(root: HTMLElement): void {
     return;
   }
 
+  const userField = usernameInput;
+  const passField = passwordInput;
+  const userError = usernameErrorEl;
+  const passError = passwordErrorEl;
+
   function clearFieldErrors(): void {
-    usernameErrorEl.textContent = "";
-    passwordErrorEl.textContent = "";
-    usernameInput.removeAttribute("aria-invalid");
-    passwordInput.removeAttribute("aria-invalid");
+    userError.textContent = "";
+    passError.textContent = "";
+    userField.removeAttribute("aria-invalid");
+    passField.removeAttribute("aria-invalid");
   }
 
   function applyErrors(username: string, password: string): boolean {
@@ -72,35 +77,33 @@ export function mountLoginPage(root: HTMLElement): void {
       return false;
     }
     if (errors.username) {
-      usernameErrorEl.textContent = errors.username;
-      usernameInput.setAttribute("aria-invalid", "true");
+      userError.textContent = errors.username;
+      userField.setAttribute("aria-invalid", "true");
     }
     if (errors.password) {
-      passwordErrorEl.textContent = errors.password;
-      passwordInput.setAttribute("aria-invalid", "true");
+      passError.textContent = errors.password;
+      passField.setAttribute("aria-invalid", "true");
     }
     return true;
   }
 
-  usernameInput.addEventListener("input", () => {
-    if (usernameErrorEl.textContent) {
-      usernameErrorEl.textContent = "";
-      usernameInput.removeAttribute("aria-invalid");
+  userField.addEventListener("input", () => {
+    if (userError.textContent) {
+      userError.textContent = "";
+      userField.removeAttribute("aria-invalid");
     }
   });
 
-  passwordInput.addEventListener("input", () => {
-    if (passwordErrorEl.textContent) {
-      passwordErrorEl.textContent = "";
-      passwordInput.removeAttribute("aria-invalid");
+  passField.addEventListener("input", () => {
+    if (passError.textContent) {
+      passError.textContent = "";
+      passField.removeAttribute("aria-invalid");
     }
   });
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-    applyErrors(username, password);
+    applyErrors(userField.value, passField.value);
     // Backend integration can hook here later.
   });
 }
