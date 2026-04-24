@@ -9,8 +9,13 @@ export function mountLoginPage(root: HTMLElement): void {
   root.innerHTML = `
     <div class="login-shell">
       <main class="login-card" aria-labelledby="login-title">
-        <h1 id="login-title">Habit Tracker</h1>
-        <p class="subtitle">Sign in to continue</p>
+        <header class="login-header">
+          <div class="login-mark" aria-hidden="true">H</div>
+          <div class="login-header-text">
+            <h1 id="login-title">Habit Tracker</h1>
+            <p class="subtitle">Sign in to your account</p>
+          </div>
+        </header>
         <form id="login-form" novalidate>
           <div class="field">
             <label for="username">Username or email</label>
@@ -23,8 +28,20 @@ export function mountLoginPage(root: HTMLElement): void {
             />
             <p id="username-error" class="field-error" role="alert" aria-live="polite"></p>
           </div>
-          <div class="field">
-            <label for="password">Password</label>
+          <div class="field field-password">
+            <div class="field-label-row">
+              <label for="password">Password</label>
+              <button
+                type="button"
+                class="text-btn"
+                id="toggle-password"
+                aria-pressed="false"
+                aria-controls="password"
+                aria-label="Show password"
+              >
+                Show
+              </button>
+            </div>
             <input
               id="password"
               name="password"
@@ -34,10 +51,14 @@ export function mountLoginPage(root: HTMLElement): void {
             />
             <p id="password-error" class="field-error" role="alert" aria-live="polite"></p>
           </div>
+          <div class="form-meta">
+            <a href="#" class="login-link" id="forgot-password">Forgot password?</a>
+          </div>
           <div class="form-actions">
-            <button type="submit">Login</button>
+            <button type="submit">Sign in</button>
           </div>
         </form>
+        <p class="login-footer">Build habits, one day at a time.</p>
       </main>
     </div>
   `;
@@ -47,6 +68,8 @@ export function mountLoginPage(root: HTMLElement): void {
   const passwordInput = root.querySelector<HTMLInputElement>("#password");
   const usernameErrorEl = root.querySelector<HTMLElement>("#username-error");
   const passwordErrorEl = root.querySelector<HTMLElement>("#password-error");
+  const togglePasswordBtn = root.querySelector<HTMLButtonElement>("#toggle-password");
+  const forgotLink = root.querySelector<HTMLAnchorElement>("#forgot-password");
 
   if (
     !form ||
@@ -62,6 +85,24 @@ export function mountLoginPage(root: HTMLElement): void {
   const passField = passwordInput;
   const userError = usernameErrorEl;
   const passError = passwordErrorEl;
+
+  forgotLink?.addEventListener("click", (event) => {
+    event.preventDefault();
+    // Placeholder until reset flow exists.
+  });
+
+  if (togglePasswordBtn) {
+    togglePasswordBtn.addEventListener("click", () => {
+      const show = passField.type === "password";
+      passField.type = show ? "text" : "password";
+      togglePasswordBtn.setAttribute("aria-pressed", show ? "true" : "false");
+      togglePasswordBtn.setAttribute(
+        "aria-label",
+        show ? "Hide password" : "Show password",
+      );
+      togglePasswordBtn.textContent = show ? "Hide" : "Show";
+    });
+  }
 
   function clearFieldErrors(): void {
     userError.textContent = "";
